@@ -9,26 +9,28 @@ export const App: React.FC = () => {
   const [food, setFood] = useState(-1);
   const [categorySelected, setCategorySelected] = useState("Sin filtro");
   const [buttonDisabled, setButtonDisabled] = useState(false);
-  const [quantity, setQuantity] = useState(0);
+  const [quantity, setQuantity] = useState(12);
   const [effect, setEffect] = useState(false);
   const archivoSonidoRef = useRef<HTMLAudioElement | null>(null);
+  const [restaurantsData, setRestaurantData] = useState(restaurants);
 
   const getRandomNumber = () => {
     setButtonDisabled(true);
     setEffect(true);
     ruletaSong();
-    const localFoodQuantity = 12;
+
     let count = 1;
     const interval = setInterval(() => {
       setFood((prevState) => {
-        let newNumber = Math.floor(Math.random() * localFoodQuantity);
+        let newNumber = Math.floor(Math.random() * quantity);
         if (newNumber === prevState) {
-          newNumber = (prevState + 1) % localFoodQuantity;
+          newNumber = (prevState + 1) % quantity;
         }
         return newNumber;
       });
+
       count++;
-      if (count === localFoodQuantity) {
+      if (count === 12) {
         clearInterval(interval);
         setButtonDisabled(false);
         setEffect(false);
@@ -54,13 +56,17 @@ export const App: React.FC = () => {
         }
       });
 
+      const filterRestaurant = restaurants.filter(
+        (item) => item.category === category
+      );
+      setRestaurantData(filterRestaurant);
       setQuantity(quantity);
     } else {
       setQuantity(restaurants.length);
+      setRestaurantData(restaurants);
     }
   };
 
-  console.log(quantity);
   useEffect(() => {
     getFoodCategoryQuantity(categorySelected);
   }, [categorySelected]);
@@ -75,35 +81,57 @@ export const App: React.FC = () => {
             <FilterCard
               foodType="Comida"
               selected={categorySelected === "Comida" ? true : false}
-              onClick={() => setCategorySelected("Comida")}
+              onClick={() => {
+                setFood(-1);
+                setCategorySelected("Comida");
+              }}
             />
             <FilterCard
               foodType="Postre"
               selected={categorySelected === "Postre" ? true : false}
-              onClick={() => setCategorySelected("Postre")}
+              onClick={() => {
+                setFood(-1);
+                setCategorySelected("Postre");
+              }}
             />
             <FilterCard
               foodType="Sin filtro"
               selected={categorySelected === "Sin filtro" ? true : false}
-              onClick={() => setCategorySelected("Sin filtro")}
+              onClick={() => {
+                setFood(-1);
+                setCategorySelected("Sin filtro");
+              }}
             />
           </div>
           <div>
             {food > -1 ? (
-              restaurants.map(
-                (item) =>
-                  item.id === food && (
+              restaurantsData.map(
+                (item, index) =>
+                  index === food && (
                     <div
                       key={item.id}
                       className="flex justify-center items-center flex-col gap-2"
                     >
-                      <div className="w-[100px] h-[100px] bg-white pointer-events-none">
-                        <img
-                          src={item.image ? item.image : RandomLogo}
-                          alt={`Logo ${item.name}`}
-                          className="w-[100px] h-[100px]"
-                        />
-                      </div>
+                      <a
+                        href={`${
+                          !buttonDisabled
+                            ? "https://www.pedidosya.com.ar/restaurantes/rosario/" +
+                              item.url +
+                              "-menu?origin=shop_list}"
+                            : ""
+                        }`}
+                        className={!buttonDisabled ? "" : "cursor-default"}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        <div className="w-[100px] h-[100px] bg-white pointer-events-none">
+                          <img
+                            src={item.image ? item.image : RandomLogo}
+                            alt={`Logo ${item.name}`}
+                            className="w-[100px] h-[100px]"
+                          />
+                        </div>
+                      </a>
                       <p>{item.name}</p>
                     </div>
                   )
@@ -115,9 +143,9 @@ export const App: React.FC = () => {
                     <svg
                       className="w-6 h-6 text-violet-500"
                       fill="none"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
                     >
@@ -139,7 +167,7 @@ export const App: React.FC = () => {
             onClick={() => getRandomNumber()}
             disabled={buttonDisabled}
           >
-            Buscar comida
+            Buscar Local
           </button>
         </div>
         <div></div>
