@@ -67,6 +67,10 @@ export const App: React.FC = () => {
     }
   };
 
+  const comboChange = (event: any) => {
+    console.log(event.target.value);
+  };
+
   useEffect(() => {
     getFoodCategoryQuantity(categorySelected);
   }, [categorySelected]);
@@ -137,7 +141,7 @@ export const App: React.FC = () => {
                   )
               )
             ) : (
-              <div className="flex justify-center flex-col items-center">
+              <div className="flex justify-center flex-col items-center gap-2">
                 <div className="w-[100px] h-[100px] flex justify-center items-center">
                   <div className="animate-bounce bg-white dark:bg-slate-800 p-2 w-10 h-10 ring-1 ring-slate-900/5 dark:ring-slate-200/20 shadow-lg rounded-full flex items-center justify-center">
                     <svg
