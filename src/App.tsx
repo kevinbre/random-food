@@ -84,7 +84,7 @@ export const App: React.FC = () => {
       </Helmet>
       <div className="shadow-bg-opacity max-w-2xl justify-center w-screen h-screen bg-general-bg bg-cover bg-center bg-neutral-900 text-white flex flex-col py-5 items-center">
         <div className="gap-7 flex flex-col justify-center items-center">
-          <h1 className="text-2xl">🍕 Random Food 🍕</h1>
+          <h1 className="text-2xl">🍕 Random Food 🍧</h1>
           <div className="flex gap-2">
             <FilterCard
               foodType="Comida"
