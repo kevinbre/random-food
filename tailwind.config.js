@@ -7,7 +7,7 @@ export default {
         "general-bg": "url('/src/assets/background.jpg')",
       },
       boxShadow: {
-        "bg-opacity": "inset 0 0 0 1000px rgba(0, 0, 0, 0.95);",
+        "bg-opacity": "inset 0 0 0 1000px rgba(0, 0, 0, 0.85);",
       },
       keyframes: {
         wiggle: {
