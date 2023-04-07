@@ -3,6 +3,12 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      backgroundImage: {
+        "general-bg": "url('/src/assets/background.jpg')",
+      },
+      boxShadow: {
+        "bg-opacity": "inset 0 0 0 1000px rgba(0, 0, 0, 0.95);",
+      },
       keyframes: {
         wiggle: {
           "0%, 100%": { transform: "rotate(-3deg)" },
