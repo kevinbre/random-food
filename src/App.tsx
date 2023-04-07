@@ -1,13 +1,16 @@
 import { useEffect, useRef, useState } from "react";
-import { restaurants } from "./data/restaurants";
 import RandomLogo from "../public/assets/logos/logo-random.png";
-import { FilterCard } from "./components/FilterCard";
-import PedidosYa from "./assets/pedidosya.svg";
 import Song from "./assets/songs/ruleta-song.mp3";
+import { FilterCard } from "./components/FilterCard";
+import { restaurants } from "./data/restaurants";
+import { Helmet } from "react-helmet";
+
+export type filterTypes = "Comida" | "Postre" | "Sin filtro";
 
 export const App: React.FC = () => {
   const [food, setFood] = useState(-1);
-  const [categorySelected, setCategorySelected] = useState("Sin filtro");
+  const [categorySelected, setCategorySelected] =
+    useState<filterTypes>("Sin filtro");
   const [buttonDisabled, setButtonDisabled] = useState(false);
   const [quantity, setQuantity] = useState(12);
   const [effect, setEffect] = useState(false);
@@ -17,7 +20,7 @@ export const App: React.FC = () => {
   const getRandomNumber = () => {
     setButtonDisabled(true);
     setEffect(true);
-    ruletaSong();
+    rouletteSong();
 
     let count = 1;
     const interval = setInterval(() => {
@@ -38,7 +41,7 @@ export const App: React.FC = () => {
     }, 200);
   };
 
-  function ruletaSong() {
+  function rouletteSong() {
     if (!archivoSonidoRef.current) {
       archivoSonidoRef.current = new Audio(Song);
     }
@@ -67,18 +70,19 @@ export const App: React.FC = () => {
     }
   };
 
-  const comboChange = (event: any) => {
-    console.log(event.target.value);
-  };
-
   useEffect(() => {
     getFoodCategoryQuantity(categorySelected);
   }, [categorySelected]);
 
   return (
     <div className="bg-black flex justify-center">
-      <div className="shadow-bg-opacity max-w-2xl justify-between w-screen h-screen bg-general-bg bg-cover bg-center bg-neutral-900 text-white flex flex-col py-5 items-center">
-        <div></div>
+      <Helmet>
+        <title>
+          Random Food {`${food > -1 ? "| " + restaurantsData[food].name : ""} `}
+        </title>
+        <meta name="description" content="Helmet application" />
+      </Helmet>
+      <div className="shadow-bg-opacity max-w-2xl justify-center w-screen h-screen bg-general-bg bg-cover bg-center bg-neutral-900 text-white flex flex-col py-5 items-center">
         <div className="gap-7 flex flex-col justify-center items-center">
           <h1 className="text-2xl">🍕 Random Food 🍕</h1>
           <div className="flex gap-2">
@@ -86,25 +90,34 @@ export const App: React.FC = () => {
               foodType="Comida"
               selected={categorySelected === "Comida" ? true : false}
               onClick={() => {
-                setFood(-1);
-                setCategorySelected("Comida");
+                if (!buttonDisabled) {
+                  setFood(-1);
+                  !buttonDisabled && setCategorySelected("Comida");
+                }
               }}
+              isRolling={buttonDisabled}
             />
             <FilterCard
               foodType="Postre"
               selected={categorySelected === "Postre" ? true : false}
               onClick={() => {
-                setFood(-1);
-                setCategorySelected("Postre");
+                if (!buttonDisabled) {
+                  setFood(-1);
+                  setCategorySelected("Postre");
+                }
               }}
+              isRolling={buttonDisabled}
             />
             <FilterCard
               foodType="Sin filtro"
               selected={categorySelected === "Sin filtro" ? true : false}
               onClick={() => {
-                setFood(-1);
-                setCategorySelected("Sin filtro");
+                if (!buttonDisabled) {
+                  setFood(-1);
+                  !buttonDisabled && setCategorySelected("Sin filtro");
+                }
               }}
+              isRolling={buttonDisabled}
             />
           </div>
           <div>
@@ -114,7 +127,9 @@ export const App: React.FC = () => {
                   index === food && (
                     <div
                       key={item.id}
-                      className="flex justify-center items-center flex-col gap-2"
+                      className={`flex justify-center items-center flex-col gap-2 transition-all ${
+                        !buttonDisabled ? "hover:scale-105" : ""
+                      }`}
                     >
                       <a
                         href={`${
@@ -124,7 +139,9 @@ export const App: React.FC = () => {
                               "-menu?origin=shop_list}"
                             : ""
                         }`}
-                        className={!buttonDisabled ? "" : "cursor-default"}
+                        className={`${
+                          !buttonDisabled ? "" : "cursor-not-allowed"
+                        } flex justify-center items-center flex-col gap-2`}
                         target="_blank"
                         rel="noreferrer"
                       >
@@ -135,8 +152,8 @@ export const App: React.FC = () => {
                             className="w-[100px] h-[100px]"
                           />
                         </div>
+                        <p className="font-bold italic text-lg">{item.name}</p>
                       </a>
-                      <p>{item.name}</p>
                     </div>
                   )
               )
@@ -167,18 +184,13 @@ export const App: React.FC = () => {
           <button
             className={`${
               effect && "animate-wiggle"
-            } bg-purple-950 px-3 py-1 rounded-md hover:scale-105 hover:bg-purple-700 disabled:bg-purple-700/20 click:scale-95`}
+            } bg-purple-950 px-3 py-1 rounded-md hover:scale-105 hover:bg-purple-700 disabled:bg-purple-700/20 click:scale-95 disabled:cursor-not-allowed`}
             onClick={() => getRandomNumber()}
             disabled={buttonDisabled}
           >
             Buscar Local
           </button>
         </div>
-        <div></div>
-        {/* <div className="flex flex-col justify-center items-center">
-        <p className="opacity-60">Powered by</p>
-        <img src={PedidosYa} alt={`Logo pedidos ya`} width={150} />
-      </div> */}
       </div>
     </div>
   );

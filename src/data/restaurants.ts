@@ -1,6 +1,6 @@
 export const restaurants = [
   {id: 0, name: "Club de la Milanesa", image: "./assets/logos/logo-clubdelamila.webp", category: "Comida", url:"club-de-la-milanesa-pichincha" },
-  {id: 1, name: "Ana Juana", image: "./assets/logos/logo-anajuana.webp", category: "Comida", url:"anajuana" },
+  {id: 1, name: "Anajuana", image: "./assets/logos/logo-anajuana.webp", category: "Comida", url:"anajuana" },
   {id: 2, name: "Las Tortugas Ninja", image: "./assets/logos/logo-tortugas.webp", category: "Comida", url:"la-pizzeria-de-las-tortugas-ninja-jujuy"},
   {id: 3, name: "Mostaza", image: "./assets/logos/logo-mostaza.webp", category: "Comida", url:"mostaza-pellegrini-rosario"},
   {id: 4, name: "Metro Pizza", image: "./assets/logos/logo-metro.webp", category: "Comida", url:"metro-nyc-pizza-centro"},
